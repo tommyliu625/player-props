@@ -1,0 +1,10 @@
+TeamInfo home_team;
+
+Integer "home_team_score";
+Integer "period";
+boolean "postseason";
+Integer "season";
+String "status";
+String "time";
+TeamInfo "visitor_team";
+Integer "visitor_team_score";
