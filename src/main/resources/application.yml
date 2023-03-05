@@ -15,6 +15,3 @@ logging:
     root: INFO
     com.example: DEBUG
 
-server:
-  servlet:
-    context-path: /api/v1
