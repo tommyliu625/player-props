@@ -27,7 +27,7 @@ public class TestPSQL {
     ResultSet rs = stmt.executeQuery("SELECT * FROM public.games");
 
     int num = 0;
-    while(rs.next()) {
+    while(rs.next()) {∏
       String id = rs.getString("id");
       Date date = rs.getDate("date");
       Integer ht_score = rs.getInt("home_team_score");

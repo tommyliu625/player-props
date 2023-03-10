@@ -9,8 +9,6 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BDLResponseInfo {
-  String hello;
-
   List<GameInfo> data;
 
   MetaInfo meta;

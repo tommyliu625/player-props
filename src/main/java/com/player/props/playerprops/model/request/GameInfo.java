@@ -1,10 +1,13 @@
 package com.player.props.playerprops.model.request;
 
-import java.util.Date;
+import java.sql.Date;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GameInfo {
   String id;
 

@@ -14,4 +14,3 @@ logging:
   level:
     root: INFO
     com.example: DEBUG
-
