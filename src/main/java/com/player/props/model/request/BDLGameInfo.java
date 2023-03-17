@@ -1,33 +1,30 @@
-package com.player.props.playerprops.model.request;
-
-import java.sql.Date;
+package com.player.props.model.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GameInfo {
+public class BDLGameInfo {
   String id;
 
-  Date date;
+  String date;
 
-  TeamInfo home_team;
+  BDLTeamInfo home_team;
 
-  Integer home_team_score;
+  int home_team_score;
 
   Integer period;
 
   boolean postseason;
 
-  Integer season;
+  int season;
 
   String status;
 
   String time;
 
-  TeamInfo visitor_team;
+  BDLTeamInfo visitor_team;
 
   Integer visitor_team_score;
 }

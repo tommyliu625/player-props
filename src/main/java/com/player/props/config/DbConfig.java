@@ -1,4 +1,4 @@
-package com.player.props.playerprops.config;
+package com.player.props.config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

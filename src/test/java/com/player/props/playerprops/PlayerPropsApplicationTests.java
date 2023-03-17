@@ -1,4 +1,4 @@
-package com.player.props.playerprops;
+package com.player.props;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
