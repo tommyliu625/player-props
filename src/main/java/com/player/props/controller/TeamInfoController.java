@@ -36,7 +36,7 @@ public class TeamInfoController {
   @GetMapping(value = "/team-info", produces = "application/json")
   public List<?> getTeamInfo(@RequestParam Map<String, String> params) {
     List<?> list = null;
-    EntityManager entityManager = null;
+      EntityManager entityManager = null;
     try {
       entityManager = entityManagerFactory.createEntityManager();
       entityManager.getTransaction().begin();

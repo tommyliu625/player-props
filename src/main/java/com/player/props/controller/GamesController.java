@@ -69,7 +69,7 @@ public class GamesController {
     log.info("START: POST Save Games");
     SuccessfulSaveResponse response = gameService.saveGames();
     log.info("END: POST Save Games");
-    return response;
+      return response;
   }
 
 }

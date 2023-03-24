@@ -6,4 +6,5 @@ public interface GameService {
 
   SuccessfulSaveResponse saveGames() throws Exception;
 
+  SuccessfulSaveResponse startJob() throws Exception;
 }

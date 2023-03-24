@@ -13,4 +13,16 @@ public class DateUtil {
     String nextDayString = nextDay.format(formatter);
     return nextDayString;
   }
+
+  public static boolean checkIsCurrentDate(String date) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    String today = LocalDate.now().format(formatter);
+    return today.equals(date);
+  }
+
+  public static String yesterdayStr() {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    String yesterday = LocalDate.now().minusDays(1).format(formatter);
+    return yesterday;
+  }
 }

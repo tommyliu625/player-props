@@ -4,4 +4,6 @@ import com.player.props.model.response.SuccessfulSaveResponse;
 
 public interface PlayerGameService {
   SuccessfulSaveResponse savePlayerGames() throws Exception;
+
+  SuccessfulSaveResponse startJob() throws Exception;
 }

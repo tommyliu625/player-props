@@ -3,8 +3,6 @@ package com.player.props.service.impl;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -22,7 +20,7 @@ import com.player.props.model.request.MetaInfo;
 import com.player.props.model.response.SuccessfulSaveResponse;
 import com.player.props.service.GameService;
 import com.player.props.util.BdlUtil;
-import com.player.props.util.DateUtil;
+import static com.player.props.util.DateUtil.*;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,11 +33,33 @@ public class GameServiceImpl implements GameService {
 
   private static String BDL_ATTRIBUTE = "games";
 
+  public SuccessfulSaveResponse startJob() throws Exception {
+    SuccessfulSaveResponse saveResponse = new SuccessfulSaveResponse();
+
+    log.info("Starting Game Info Job");
+    int page = 1;
+    String url = BdlUtil.buildUrl(yesterdayStr(), page, BDL_ATTRIBUTE);
+    log.info("Calling -> {}", url);
+
+    BDLGameInfoResponse response = getResponse(url);
+    List<BDLGameInfo> data = response.getData();
+    MetaInfo meta = response.getMeta();
+
+    saveEntities(data, saveResponse);
+
+    if (meta.getNext_page() != null) {
+      getMorePages(url, page + 1, saveResponse);
+    }
+    saveResponse.setSavedSuccessfully(true);
+    log.info("Ending Game Info Job, saved {} records", saveResponse.getRecordsSaved());
+    return saveResponse;
+  }
+
   public SuccessfulSaveResponse saveGames() throws InterruptedException, ParseException, Exception {
     int page = 1;
     boolean cont = true;
     SuccessfulSaveResponse saveResponse = new SuccessfulSaveResponse();
-    String date = "2022-10-18";
+    String date = "2023-03-17";
 
     do {
       String url = BdlUtil.buildUrl(date, page, BDL_ATTRIBUTE);
@@ -49,10 +69,10 @@ public class GameServiceImpl implements GameService {
       List<BDLGameInfo> data = response.getData();
       MetaInfo meta = response.getMeta();
 
-      // if (checkIsCurrentDate(date)) {
-      //   saveResponse.setSavedSuccessfully(true);
-      //   break;
-      // }
+      if (checkIsCurrentDate(date)) {
+        saveResponse.setSavedSuccessfully(true);
+        break;
+      }
 
       saveEntities(data, saveResponse);
 
@@ -60,18 +80,11 @@ public class GameServiceImpl implements GameService {
         getMorePages(url, page + 1, saveResponse);
       }
 
-      date = DateUtil.iterateDate(date);
+      date = iterateDate(date);
       Thread.sleep(1001);
     } while (cont);
 
     return saveResponse;
-  }
-
-  private boolean checkIsCurrentDate(String date) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    LocalDate today = LocalDate.parse(LocalDate.now().toString(), formatter);
-    LocalDate currDate = LocalDate.parse(date, formatter);
-    return today.equals(currDate);
   }
 
   private void getMorePages(String url, int page, SuccessfulSaveResponse saveResponse) throws InterruptedException {

@@ -7,7 +7,7 @@ import javax.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "player_game_history")
+@Table(name = "player_game_history_staging")
 @Data
 public class PlayerGameEntity {
 

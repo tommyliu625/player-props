@@ -21,7 +21,10 @@ import com.player.props.service.PlayerGameService;
 import com.player.props.util.BdlUtil;
 import com.player.props.util.DateUtil;
 
+import static com.player.props.util.DateUtil.*;
+
 import lombok.extern.slf4j.Slf4j;
+
 
 @Service
 @Slf4j
@@ -31,6 +34,30 @@ public class PlayerGameServiceImpl implements PlayerGameService {
   EntityManagerFactory emf;
 
   private static String BDL_ATTRIBUTE = "stats";
+
+
+  // @Scheduled(cron = "30 32 11 * * ?", zone = "US/Eastern")
+  public SuccessfulSaveResponse startJob() throws Exception {
+    SuccessfulSaveResponse saveResponse = new SuccessfulSaveResponse();
+    log.info("Starting Player Info Job");
+
+    int page = 1;
+    String url = BdlUtil.buildUrl(yesterdayStr(), page, BDL_ATTRIBUTE);
+    log.info("Calling -> {}", url);
+
+    BDLPlayerGameInfoResponse response = getResponse(url);
+    List<BDLPlayerGameInfo> data = response.getData();
+    MetaInfo meta = response.getMeta();
+
+    saveEntities(data, saveResponse);
+
+    if (meta.getNext_page() != null) {
+      getMorePages(url, page + 1, saveResponse);
+    }
+    saveResponse.setSavedSuccessfully(true);
+    log.info("Ending Player Info Job, saved {} records", saveResponse.getRecordsSaved());
+    return saveResponse;
+  }
 
   public SuccessfulSaveResponse savePlayerGames() throws Exception {
     int page = 1;
@@ -45,6 +72,11 @@ public class PlayerGameServiceImpl implements PlayerGameService {
       BDLPlayerGameInfoResponse response = getResponse(newUrl);
       List<BDLPlayerGameInfo> data = response.getData();
       MetaInfo meta = response.getMeta();
+
+      if (checkIsCurrentDate(date)) {
+        saveResponse.setSavedSuccessfully(true);
+        break;
+      }
 
       saveEntities(data, saveResponse);
 

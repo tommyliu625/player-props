@@ -18,9 +18,11 @@ public class BdlUtil {
     str.append("?");
     str.append("seasons[]").append("=").append("2022");
     str.append("&per_page").append("=").append(100);
-    str.append("&start_date").append("=").append(date);
-    str.append("&end_date").append("=").append(date);
 
+    if (date != "") {
+      str.append("&start_date").append("=").append(date);
+      str.append("&end_date").append("=").append(date);
+    }
     if (page > 1) {
       str.append("&page=").append(page);
     }

@@ -11,7 +11,7 @@ import lombok.Data;
 
 
 @Entity
-@Table(name = "game_history")
+@Table(name = "game_history_staging")
 @Data
 public class GamesEntity {
 
