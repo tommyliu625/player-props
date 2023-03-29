@@ -9,9 +9,10 @@ import javax.persistence.Table;
 
 import lombok.Data;
 
+import static com.player.props.constants.DbConstants.GAME_HISTORY_STAGING_TABLE;
 
 @Entity
-@Table(name = "game_history_staging")
+@Table(name = GAME_HISTORY_STAGING_TABLE)
 @Data
 public class GamesEntity {
 

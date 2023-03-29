@@ -4,10 +4,12 @@ import java.sql.Date;
 
 import javax.persistence.*;
 
+import static com.player.props.constants.DbConstants.PLAYER_GAME_HISTORY_STAGING_TABLE;
+
 import lombok.Data;
 
 @Entity
-@Table(name = "player_game_history_staging")
+@Table(name = PLAYER_GAME_HISTORY_STAGING_TABLE)
 @Data
 public class PlayerGameEntity {
 

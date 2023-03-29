@@ -23,7 +23,7 @@ public class RunProcess {
     this.gameProc = gameProc;
   }
 
-  @Scheduled(cron = "45 42 18 * * ?", zone = "US/Eastern")
+  @Scheduled(cron = "30 08 14 * * ?", zone = "US/Eastern")
   public void runProcess() throws Exception {
     // TODO Auto-generated method stub
     try {

@@ -1,11 +1,22 @@
 package com.player.props.service.impl;
 
+import static com.player.props.util.DateUtil.checkIsCurrentDate;
+import static com.player.props.util.DateUtil.yesterdayStr;
+
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,18 +24,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.player.props.dao.PlayerGameEntity;
+import com.player.props.dao.PlayerGameFactEntity;
 import com.player.props.model.request.BDLPlayerGameInfo;
 import com.player.props.model.request.BDLPlayerGameInfoResponse;
+import com.player.props.model.request.GenericRequestBody;
 import com.player.props.model.request.MetaInfo;
 import com.player.props.model.response.SuccessfulSaveResponse;
 import com.player.props.service.PlayerGameService;
 import com.player.props.util.BdlUtil;
+import com.player.props.util.CriteriaBuilderUtil;
 import com.player.props.util.DateUtil;
 
-import static com.player.props.util.DateUtil.*;
-
 import lombok.extern.slf4j.Slf4j;
-
 
 @Service
 @Slf4j
@@ -35,6 +46,74 @@ public class PlayerGameServiceImpl implements PlayerGameService {
 
   private static String BDL_ATTRIBUTE = "stats";
 
+  public List<PlayerGameFactEntity> getPlayerGames(Map<String, String> params,
+      GenericRequestBody requestBody) throws Exception {
+    List<PlayerGameFactEntity> result = null;
+    Map<String, Map<String, Object>> whereMap = requestBody.getWhere();
+    Map<String, String> orderByMap = requestBody.getOrderBy();
+    Integer limit = Integer.valueOf(requestBody.getLimit());
+    String startDate = requestBody.getStart_date();
+    String endDate = requestBody.getEnd_date();
+
+    EntityManager em = null;
+    try {
+      em = emf.createEntityManager();
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<PlayerGameFactEntity> query = cb.createQuery(PlayerGameFactEntity.class);
+      Root<PlayerGameFactEntity> root = query.from(PlayerGameFactEntity.class);
+
+
+      List<Predicate> wherePredicates = new ArrayList<>();
+      if (whereMap != null) {
+        Map<String, Predicate> predicateCondMap = CriteriaBuilderUtil.buildWherePredicate(root, cb, whereMap);
+        if (predicateCondMap.containsKey("and")) {
+          wherePredicates.add(predicateCondMap.get("and"));
+        };
+        if (predicateCondMap.containsKey("or")) {
+          wherePredicates.add(predicateCondMap.get("or"));
+        };
+      }
+      if (startDate != null && endDate != null) {
+        wherePredicates.add(CriteriaBuilderUtil.buildDatesPredicate(root, cb, startDate, endDate));
+      }
+      
+      query.select(root);
+      query.where(wherePredicates.toArray(new Predicate[] {}));
+      if (orderByMap != null) {
+        List<Order> orderByList = CriteriaBuilderUtil.buildOrderByPredicate(root, cb, orderByMap);
+        query.orderBy(orderByList);
+      }
+      TypedQuery<PlayerGameFactEntity> typedQuery = em.createQuery(query);
+      if (Integer.valueOf(limit) > 0) {
+        typedQuery.setMaxResults(limit);
+      }
+      result = typedQuery.getResultList();
+    } catch (Exception e) {
+      log.error("Error fetching Player Game Information | Error msg: {}", e.getMessage());
+    } finally {
+      if (em != null) {
+        em.close();
+      }
+    }
+    return result;
+  }
+
+  private Predicate buildWherePredicate(Root<PlayerGameFactEntity> root, CriteriaBuilder criteriaBuilder,
+      Map<String, Object> whereMap, String startDate, String endDate) {
+    List<Predicate> merge = new ArrayList<>();
+
+    // if (whereMap != null) {
+    //   List<Predicate> whereList = CriteriaBuilderUtil.buildWherePredicate(root, criteriaBuilder, whereMap);
+    //   merge.addAll(whereList);
+    // }
+
+    // if (startDate != null && endDate != null) {
+    //   List<Predicate> datesList = CriteriaBuilderUtil.buildDatesPredicate(root, criteriaBuilder, startDate, endDate);
+    //   merge.addAll(datesList);
+    // }
+    Predicate mergePredicate = criteriaBuilder.and(merge.toArray(new Predicate[] {}));
+    return mergePredicate;
+  }
 
   // @Scheduled(cron = "30 32 11 * * ?", zone = "US/Eastern")
   public SuccessfulSaveResponse startJob() throws Exception {
@@ -94,8 +173,8 @@ public class PlayerGameServiceImpl implements PlayerGameService {
     try {
       RestTemplate restTemplate = new RestTemplate();
       ResponseEntity<BDLPlayerGameInfoResponse> responseEntity = restTemplate.getForEntity(newUrl,
-        BDLPlayerGameInfoResponse.class);
-        response = responseEntity.getBody();
+          BDLPlayerGameInfoResponse.class);
+      response = responseEntity.getBody();
     } catch (Exception e) {
       log.error("Error fetching {} with error message {}", newUrl, e.getMessage());
     }
@@ -119,7 +198,7 @@ public class PlayerGameServiceImpl implements PlayerGameService {
         break;
       }
       page += 1;
-    } while(cont);
+    } while (cont);
   }
 
   private void saveEntities(List<BDLPlayerGameInfo> data, SuccessfulSaveResponse saveResponse) {

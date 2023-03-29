@@ -11,11 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.player.props.dao.PlayerGameEntity;
+import com.player.props.dao.PlayerGameFactEntity;
+import com.player.props.model.request.GenericRequestBody;
+import com.player.props.model.request.PlayerGameRequestBody;
 import com.player.props.model.response.SuccessfulSaveResponse;
 import com.player.props.service.PlayerGameService;
 
@@ -34,6 +38,8 @@ public class PlayerGameController {
 
   @GetMapping(value = "/player-game-info", produces = MediaType.APPLICATION_JSON_VALUE)
   public List<PlayerGameEntity> getPlayerGameInfo(@RequestParam Map<String, String> params) {
+
+    
     EntityManager em = null;
     List<PlayerGameEntity> result = null;
     try {
@@ -47,6 +53,14 @@ public class PlayerGameController {
       log.error(e.getMessage());
     }
     return result;
+  }
+
+  @GetMapping(value = "/player-game-info-data", produces = MediaType.APPLICATION_JSON_VALUE)
+  public List<PlayerGameFactEntity> getData(@RequestParam Map<String, String> params, @RequestBody GenericRequestBody request) throws Exception {
+    log.info("START: GET Player Game");
+    List<PlayerGameFactEntity> data = playerGameService.getPlayerGames(params, request);
+    log.info("END: GET Player Game");
+    return data;
   }
 
   @PostMapping(value = "/start-player-game-job", produces = MediaType.APPLICATION_JSON_VALUE)

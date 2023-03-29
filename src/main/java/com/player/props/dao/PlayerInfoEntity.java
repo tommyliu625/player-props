@@ -2,10 +2,12 @@ package com.player.props.dao;
 
 import javax.persistence.*;
 
+import static com.player.props.constants.DbConstants.PLAYER_INFO_STAGING_TABLE;
+
 import lombok.Data;
 
 @Entity
-@Table(name = "player_info_staging")
+@Table(name = PLAYER_INFO_STAGING_TABLE)
 @Data
 public class PlayerInfoEntity {
 

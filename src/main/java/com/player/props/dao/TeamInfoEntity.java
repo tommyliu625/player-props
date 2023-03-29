@@ -4,8 +4,10 @@ import javax.persistence.*;
 
 import lombok.Data;
 
+import static com.player.props.constants.DbConstants.TEAM_INFO_TABLE;
+
 @Entity
-@Table(name = "team_info")
+@Table(name = TEAM_INFO_TABLE)
 @Data
 public class TeamInfoEntity {
 

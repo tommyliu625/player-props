@@ -1,12 +1,24 @@
 package com.player.props.service.impl;
 
+import static com.player.props.util.DateUtil.checkIsCurrentDate;
+import static com.player.props.util.DateUtil.iterateDate;
+import static com.player.props.util.DateUtil.yesterdayStr;
+
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +26,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.player.props.dao.GamesEntity;
+import com.player.props.dao.GamesFactEntity;
 import com.player.props.model.request.BDLGameInfo;
 import com.player.props.model.request.BDLGameInfoResponse;
+import com.player.props.model.request.GenericRequestBody;
 import com.player.props.model.request.MetaInfo;
 import com.player.props.model.response.SuccessfulSaveResponse;
 import com.player.props.service.GameService;
 import com.player.props.util.BdlUtil;
-import static com.player.props.util.DateUtil.*;
+import com.player.props.util.CriteriaBuilderUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +46,58 @@ public class GameServiceImpl implements GameService {
   EntityManagerFactory emf;
 
   private static String BDL_ATTRIBUTE = "games";
+
+  @Override
+  public List<GamesFactEntity> getGamesData(GenericRequestBody request) {
+    Map<String, Map<String, Object>> whereMap = request.getWhere();
+    Map<String, String> orderByMap = request.getOrderBy();
+    String startDate = request.getStart_date();
+    String endDate = request.getEnd_date();
+    Integer limit = Integer.valueOf(request.getLimit());
+
+    List<GamesFactEntity> result = new ArrayList<>();
+    EntityManager em = null;
+    try {
+      em = emf.createEntityManager();
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<GamesFactEntity> query = cb.createQuery(GamesFactEntity.class);
+      Root<GamesFactEntity> root = query.from(GamesFactEntity.class);
+
+
+      List<Predicate> wherePredicates = new ArrayList<>();
+      if (whereMap != null) {
+        Map<String, Predicate> predicateCondMap = CriteriaBuilderUtil.buildWherePredicate(root, cb, whereMap);
+        if (predicateCondMap.containsKey("and")) {
+          wherePredicates.add(predicateCondMap.get("and"));
+        };
+        if (predicateCondMap.containsKey("or")) {
+          wherePredicates.add(predicateCondMap.get("or"));
+        };
+      }
+      if (startDate != null && endDate != null) {
+        wherePredicates.add(CriteriaBuilderUtil.buildDatesPredicate(root, cb, startDate, endDate));
+      }
+
+      query.select(root);
+      query.where(wherePredicates.toArray(new Predicate[]{}));
+      if (orderByMap != null) {
+        List<Order> orderByList = CriteriaBuilderUtil.buildOrderByPredicate(root, cb, orderByMap);
+        query.orderBy(orderByList);
+      }
+      TypedQuery<GamesFactEntity> typedQuery = em.createQuery(query);
+      if (limit != null) {
+        typedQuery.setMaxResults(limit);
+      }
+      result = typedQuery.getResultList();
+    } catch (Exception e) {
+      log.error("Error fetching Game Information | Error msg: {}", e.getMessage());
+    } finally {
+      if (em != null) {
+        em.close();
+      }
+    }
+    return result;
+  }
 
   public SuccessfulSaveResponse startJob() throws Exception {
     SuccessfulSaveResponse saveResponse = new SuccessfulSaveResponse();
@@ -59,7 +125,7 @@ public class GameServiceImpl implements GameService {
     int page = 1;
     boolean cont = true;
     SuccessfulSaveResponse saveResponse = new SuccessfulSaveResponse();
-    String date = "2023-03-17";
+    String date = "2022-10-18";
 
     do {
       String url = BdlUtil.buildUrl(date, page, BDL_ATTRIBUTE);

@@ -6,8 +6,10 @@ import org.springframework.stereotype.Component;
 import com.player.props.service.PlayerInfoService;
 import com.player.props.service.impl.PlayerInfoServiceImpl;
 import com.player.props.sqlexec.SQLCommandExecutor;
+import static com.player.props.constants.DbConstants.*;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
 @Component
@@ -24,26 +26,24 @@ public class PlayerInfoProc {
 
   public boolean process() {
 
-    String target_table = "player_info_staging_1";
-    String staging_table = "tommyliu.player_info_staging";
-    String truncate_table = "truncate table player_info_staging";
-    String delete_duplicate = "delete from player_info_staging using (select player_id from player_info_staging_1) as duplicates where player_info_staging.player_id = duplicates.player_id";
-    String insert_target = "insert into player_info_staging_1 select * from player_info_staging";
+    String truncate_table = String.format("truncate table %1$s", PLAYER_INFO_STAGING_TABLE);
+    String delete_duplicate = String.format("delete from %1$s using (select player_id from %2$s) as duplicates where %1$s.player_id = duplicates.player_id", PLAYER_INFO_STAGING_TABLE, PLAYER_INFO_TARGET_TABLE);
+    String insert_target = String.format("insert into %2$s select * from %1$s", PLAYER_INFO_STAGING_TABLE, PLAYER_INFO_TARGET_TABLE);
 
 
     try {
       boolean executeStatus;
 
       executeStatus = sqlCommandExecutor.execute(truncate_table);
-      log.info("SQL Exec Status truncating {} with status {}", staging_table, executeStatus);
+      log.info("SQL Exec Status truncating {} with status {}", PLAYER_INFO_STAGING_TABLE, executeStatus);
 
       playerInfoService.savePlayerInfo();
 
       executeStatus = sqlCommandExecutor.execute(delete_duplicate);
-      log.info("SQL Exec Status deleting duplications with status {}", staging_table, executeStatus);
+      log.info("SQL Exec Status deleting duplications from {} with status {}", PLAYER_INFO_STAGING_TABLE, executeStatus);
 
       executeStatus = sqlCommandExecutor.execute(insert_target);
-      log.info("SQL Exec Status inserting delta with status {}", staging_table, executeStatus);
+      log.info("SQL Exec Status inserting delta to {} with status {}", PLAYER_INFO_TARGET_TABLE, executeStatus);
 
       return true;
     } catch (Exception e) {
