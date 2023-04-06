@@ -23,14 +23,14 @@ public class RunProcess {
     this.gameProc = gameProc;
   }
 
-  @Scheduled(cron = "30 08 14 * * ?", zone = "US/Eastern")
+  @Scheduled(cron = "30 45 9 * * ?", zone = "US/Eastern")
   public void runProcess() throws Exception {
     // TODO Auto-generated method stub
     try {
       log.info("Starting normalization process");
       playerInfoProc.process();
-      playerGameProc.process();
       gameProc.process();
+      playerGameProc.process();
       log.info("Ending normalization process");
     } catch (Exception e) {
       log.error("Error with Normalization process");

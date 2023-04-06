@@ -5,28 +5,27 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
+import com.player.props.dao.PlayerInfoDistinctEntity;
 import com.player.props.dao.PlayerInfoEntity;
-import com.player.props.model.request.BDLPlayerInfo;
-import com.player.props.model.request.BDLPlayerInfoResponse;
+import com.player.props.model.request.GenericRequestBody;
 import com.player.props.model.response.SuccessfulSaveResponse;
-import com.player.props.service.PlayerInfoService;
 import com.player.props.service.impl.PlayerInfoServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
+@CrossOrigin
 @RestController
 @Slf4j
 @RequestMapping("/api/v1")
@@ -45,6 +44,14 @@ public class PlayerInfoController {
     TypedQuery<PlayerInfoEntity> query = em.createQuery("SELECT e FROM PlayerInfoEntity e", PlayerInfoEntity.class);
 
     List<PlayerInfoEntity> result = query.getResultList();
+    return result;
+  }
+
+  @PostMapping(value = "/player-info-data", produces = MediaType.APPLICATION_JSON_VALUE)
+  public List<PlayerInfoDistinctEntity> getPlayerInfo(@RequestBody GenericRequestBody requestBody) {
+    log.info("START: GET Player Information");
+    List<PlayerInfoDistinctEntity> result = playerInfoService.getPlayerData(requestBody);
+    log.info("END: GET Player Information");
     return result;
   }
 

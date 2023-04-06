@@ -47,6 +47,7 @@ public class GameServiceImpl implements GameService {
 
   private static String BDL_ATTRIBUTE = "games";
 
+
   @Override
   public List<GamesFactEntity> getGamesData(GenericRequestBody request) {
     Map<String, Map<String, Object>> whereMap = request.getWhere();
@@ -85,7 +86,7 @@ public class GameServiceImpl implements GameService {
         query.orderBy(orderByList);
       }
       TypedQuery<GamesFactEntity> typedQuery = em.createQuery(query);
-      if (limit != null) {
+      if (limit > 0) {
         typedQuery.setMaxResults(limit);
       }
       result = typedQuery.getResultList();

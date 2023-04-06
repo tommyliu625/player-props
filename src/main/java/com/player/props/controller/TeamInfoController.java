@@ -10,8 +10,10 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,11 +21,13 @@ import org.springframework.web.client.RestTemplate;
 
 import com.player.props.dao.TeamInfoEntity;
 import com.player.props.model.request.BDLTeamInfoResponse;
+import com.player.props.model.request.GenericRequestBody;
 import com.player.props.model.request.BDLTeamInfo;
 import com.player.props.model.response.SuccessfulSaveResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1")
 @Slf4j
@@ -33,10 +37,11 @@ public class TeamInfoController {
   EntityManagerFactory entityManagerFactory;
 
 
-  @GetMapping(value = "/team-info", produces = "application/json")
-  public List<?> getTeamInfo(@RequestParam Map<String, String> params) {
+  @PostMapping(value = "/team-info-data", produces = "application/json")
+  public List<?> getTeamInfo(@RequestBody GenericRequestBody request) {
     List<?> list = null;
-      EntityManager entityManager = null;
+    EntityManager entityManager = null;
+    log.info("START: GET Team Info");
     try {
       entityManager = entityManagerFactory.createEntityManager();
       entityManager.getTransaction().begin();
@@ -49,6 +54,7 @@ public class TeamInfoController {
         entityManager.close();
       }
     }
+    log.info("END: GET Team Info");
     return list;
 
   }

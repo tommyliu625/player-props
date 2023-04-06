@@ -1,0 +1,5 @@
+at.abbreviation as at_abbreviation,
+at.city as at_city,
+at.conference as at_conference,
+at.division as at_division,
+at.full_name as at_full_name,

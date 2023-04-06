@@ -8,10 +8,10 @@ import com.player.props.model.request.GenericRequestBody;
 import com.player.props.model.response.SuccessfulSaveResponse;
 
 public interface PlayerGameService {
+  List<PlayerGameFactEntity> getPlayerGames(GenericRequestBody request) throws Exception;
+  
+  SuccessfulSaveResponse startJob() throws Exception;
+
   SuccessfulSaveResponse savePlayerGames() throws Exception;
 
-  List<PlayerGameFactEntity> getPlayerGames(Map<String, String> params, GenericRequestBody request
-  ) throws Exception;
-
-  SuccessfulSaveResponse startJob() throws Exception;
 }

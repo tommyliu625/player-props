@@ -64,7 +64,7 @@ public class GamesFactEntity {
   private String at_score;
 
   @Column(name = "postseason")
-  private String postseason;
+  private boolean postseason;
 
   @Column(name = "season")
   private String season;

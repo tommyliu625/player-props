@@ -46,8 +46,8 @@ public class PlayerGameServiceImpl implements PlayerGameService {
 
   private static String BDL_ATTRIBUTE = "stats";
 
-  public List<PlayerGameFactEntity> getPlayerGames(Map<String, String> params,
-      GenericRequestBody requestBody) throws Exception {
+  @Override
+  public List<PlayerGameFactEntity> getPlayerGames(GenericRequestBody requestBody) throws Exception {
     List<PlayerGameFactEntity> result = null;
     Map<String, Map<String, Object>> whereMap = requestBody.getWhere();
     Map<String, String> orderByMap = requestBody.getOrderBy();
@@ -76,7 +76,7 @@ public class PlayerGameServiceImpl implements PlayerGameService {
       if (startDate != null && endDate != null) {
         wherePredicates.add(CriteriaBuilderUtil.buildDatesPredicate(root, cb, startDate, endDate));
       }
-      
+
       query.select(root);
       query.where(wherePredicates.toArray(new Predicate[] {}));
       if (orderByMap != null) {
@@ -98,24 +98,8 @@ public class PlayerGameServiceImpl implements PlayerGameService {
     return result;
   }
 
-  private Predicate buildWherePredicate(Root<PlayerGameFactEntity> root, CriteriaBuilder criteriaBuilder,
-      Map<String, Object> whereMap, String startDate, String endDate) {
-    List<Predicate> merge = new ArrayList<>();
 
-    // if (whereMap != null) {
-    //   List<Predicate> whereList = CriteriaBuilderUtil.buildWherePredicate(root, criteriaBuilder, whereMap);
-    //   merge.addAll(whereList);
-    // }
-
-    // if (startDate != null && endDate != null) {
-    //   List<Predicate> datesList = CriteriaBuilderUtil.buildDatesPredicate(root, criteriaBuilder, startDate, endDate);
-    //   merge.addAll(datesList);
-    // }
-    Predicate mergePredicate = criteriaBuilder.and(merge.toArray(new Predicate[] {}));
-    return mergePredicate;
-  }
-
-  // @Scheduled(cron = "30 32 11 * * ?", zone = "US/Eastern")
+  @Override
   public SuccessfulSaveResponse startJob() throws Exception {
     SuccessfulSaveResponse saveResponse = new SuccessfulSaveResponse();
     log.info("Starting Player Info Job");
@@ -138,6 +122,7 @@ public class PlayerGameServiceImpl implements PlayerGameService {
     return saveResponse;
   }
 
+  @Override
   public SuccessfulSaveResponse savePlayerGames() throws Exception {
     int page = 1;
     SuccessfulSaveResponse saveResponse = new SuccessfulSaveResponse();

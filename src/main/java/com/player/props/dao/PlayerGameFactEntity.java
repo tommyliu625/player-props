@@ -80,6 +80,12 @@ public class PlayerGameFactEntity {
   @Column(name = "tos")
   private int tos;
 
+  @Column(name = "opposing_team_full_name")
+  private String opposing_team_full_name;
+
+  @Column(name = "opposing_team_id")
+  private String opposing_team_id;
+
   @Column(name = "postseason")
   private boolean postseason;
 

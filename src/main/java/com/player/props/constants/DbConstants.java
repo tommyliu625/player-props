@@ -17,5 +17,6 @@ public class DbConstants {
 
   public static final String PLAYER_INFO_STAGING_TABLE = "player_info_staging";
   public static final String PLAYER_INFO_TARGET_TABLE = "player_info_target";
+  public static final String PLAYER_INFO_DISTINCT_TABLE = "player_info_distinct";
 
 }
