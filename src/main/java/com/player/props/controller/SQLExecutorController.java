@@ -19,6 +19,7 @@ import com.player.props.config.DbConfig;
 import com.player.props.processor.GameProc;
 import com.player.props.processor.PlayerGameProc;
 import com.player.props.processor.PlayerInfoProc;
+import com.player.props.processor.RunProcess;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,6 +39,9 @@ public class SQLExecutorController {
 
   @Autowired
   GameProc gameProc;
+
+  @Autowired
+  RunProcess runProcess;
 
   // @GetMapping(value = "/getRecords", produces = "application/json")
   // public Integer getRecords() throws SQLException {
@@ -78,5 +82,12 @@ public class SQLExecutorController {
     boolean res = gameProc.process();
     log.info("Ending Game Processor");
     return res;
+  }
+
+  @GetMapping(value = "/run-process", produces = MediaType.APPLICATION_JSON_VALUE)
+  public void runProcessExec() throws Exception {
+    log.info("Starting All Processors");
+    runProcess.runProcess();
+    log.info("Ending All Processors");
   }
 }

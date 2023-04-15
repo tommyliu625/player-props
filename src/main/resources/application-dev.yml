@@ -1,0 +1,6 @@
+postgres:
+  properties:
+    url: jdbc:postgresql://player-props-db.cmmimhasgknf.us-east-1.rds.amazonaws.com:5432/playerprops?useSSL=false
+    user: postgres
+    pw: whothem4n
+    driver: org.postgresql.Driver

@@ -1,0 +1,7 @@
+postgres:
+  properties:
+    url: jdbc:postgresql://localhost/playerprops
+    user: postgres
+    pw: ~
+    driver: org.postgresql.Driver
+

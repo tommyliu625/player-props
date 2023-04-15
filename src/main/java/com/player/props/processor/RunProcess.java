@@ -1,7 +1,5 @@
 package com.player.props.processor;
 
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -23,14 +21,24 @@ public class RunProcess {
     this.gameProc = gameProc;
   }
 
-  @Scheduled(cron = "30 45 9 * * ?", zone = "US/Eastern")
+  @Scheduled(cron = "30 3 7 * * ?", zone = "US/Eastern")
   public void runProcess() throws Exception {
     // TODO Auto-generated method stub
     try {
       log.info("Starting normalization process");
-      playerInfoProc.process();
-      gameProc.process();
-      playerGameProc.process();
+      if (playerInfoProc.process() != true) {
+        log.error("Error with Normalization process");
+        throw new Exception();
+      }
+      if (gameProc.process() != true) {
+        log.error("Error with Normalization process");
+        throw new Exception();
+      }
+      if (playerGameProc.process() != true) {
+        log.error("Error with Normalization process");
+        throw new Exception();
+      }
+
       log.info("Ending normalization process");
     } catch (Exception e) {
       log.error("Error with Normalization process");

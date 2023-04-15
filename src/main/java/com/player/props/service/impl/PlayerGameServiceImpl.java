@@ -102,7 +102,7 @@ public class PlayerGameServiceImpl implements PlayerGameService {
   @Override
   public SuccessfulSaveResponse startJob() throws Exception {
     SuccessfulSaveResponse saveResponse = new SuccessfulSaveResponse();
-    log.info("Starting Player Info Job");
+    log.info("Starting Player Game Job");
 
     int page = 1;
     String url = BdlUtil.buildUrl(yesterdayStr(), page, BDL_ATTRIBUTE);

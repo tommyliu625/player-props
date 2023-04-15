@@ -2,9 +2,12 @@ package com.player.props.constants;
 
 public class DbConstants {
 
-  public static String DB_URL = "jdbc:postgresql://localhost:5432/tommyliu";
-  public static String DB_USER = "tommyliu";
-  public static String DB_PW = "";
+  public static String DB_URL = "jdbc:postgresql://player-props-db.cmmimhasgknf.us-east-1.rds.amazonaws.com:5432/playerprops?useSSL=false";
+  // public static String DB_URL = "jdbc:postgresql://localhost/playerprops";
+  public static String DB_USER = "postgres";
+  // public static String DB_USER = "postgres";
+  public static String DB_PW = "whothem4n";
+  // public static String DB_PW = "";
   public static String DB_JDBC = "org.postgresql.Driver";
 
   public static final String GAME_HISTORY_STAGING_TABLE = "game_history_staging";
