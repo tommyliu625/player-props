@@ -81,7 +81,7 @@ public class PlayerGameController {
   public SuccessfulSaveResponse postPlayerGameInfo(@RequestParam Map<String, String> params) throws Exception {
 
     log.info("START: POST Save Player Game");
-    SuccessfulSaveResponse saveResponse = playerGameService.savePlayerGames();
+    SuccessfulSaveResponse saveResponse = playerGameService.savePlayerGames(params);
     log.info("END: POST Save Player Game");
     return saveResponse;
   }

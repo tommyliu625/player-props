@@ -125,11 +125,12 @@ public class GameServiceImpl implements GameService {
     return saveResponse;
   }
 
-  public SuccessfulSaveResponse saveGames() throws InterruptedException, ParseException, Exception {
+  public SuccessfulSaveResponse saveGames(
+      Map<String, String> params) throws InterruptedException, ParseException, Exception {
     int page = 1;
     boolean cont = true;
     SuccessfulSaveResponse saveResponse = new SuccessfulSaveResponse();
-    String date = "2022-10-18";
+    String date = params.get("date");
 
     do {
       String url = BdlUtil.buildUrl(date, page, BDL_ATTRIBUTE);

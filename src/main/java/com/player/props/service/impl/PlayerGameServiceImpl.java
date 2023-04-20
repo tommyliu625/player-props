@@ -127,10 +127,10 @@ public class PlayerGameServiceImpl implements PlayerGameService {
   }
 
   @Override
-  public SuccessfulSaveResponse savePlayerGames() throws Exception {
+  public SuccessfulSaveResponse savePlayerGames(Map<String, String> params) throws Exception {
     int page = 1;
     SuccessfulSaveResponse saveResponse = new SuccessfulSaveResponse();
-    String date = "2022-10-18";
+    String date = params.get("date");
     boolean cont = true;
     do {
 

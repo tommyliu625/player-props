@@ -9,9 +9,9 @@ import com.player.props.model.response.SuccessfulSaveResponse;
 
 public interface PlayerGameService {
   List<PlayerGameFactEntity> getPlayerGames(GenericRequestBody request) throws Exception;
-  
+
   SuccessfulSaveResponse startJob() throws Exception;
 
-  SuccessfulSaveResponse savePlayerGames() throws Exception;
+  SuccessfulSaveResponse savePlayerGames(Map<String, String> params) throws Exception;
 
 }
