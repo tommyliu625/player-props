@@ -1,5 +1,7 @@
 package com.player.props.processor;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,9 @@ public class RunProcess {
   final PlayerInfoProc playerInfoProc;
 
   final GameProc gameProc;
+
+  @Autowired
+  CacheManager cacheManager;
 
   RunProcess(PlayerGameProc playerGameProc, PlayerInfoProc playerInfoProc, GameProc gameProc) {
     this.playerGameProc = playerGameProc;
@@ -38,11 +43,16 @@ public class RunProcess {
         log.error("Error with Normalization process");
         throw new Exception();
       }
-
+      evictAllCaches();
       log.info("Ending normalization process");
     } catch (Exception e) {
       log.error("Error with Normalization process");
       log.error(e.getMessage());
     }
+  }
+
+  public void evictAllCaches() {
+    cacheManager.getCacheNames().stream()
+        .forEach(cacheName -> cacheManager.getCache(cacheName).clear());
   }
 }

@@ -7,6 +7,8 @@ import javax.persistence.Table;
 
 import static com.player.props.constants.DbConstants.GAME_HISTORY_TARGET_TABLE;
 
+import java.sql.Date;
+
 import lombok.Data;
 
 @Entity
@@ -19,7 +21,7 @@ public class GamesFactEntity {
   private String game_id;
 
   @Column(name = "date")
-  private String date;
+  private Date date;
 
   @Column(name = "ht_id")
   private String ht_id;

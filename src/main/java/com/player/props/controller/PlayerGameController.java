@@ -1,5 +1,7 @@
 package com.player.props.controller;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -59,8 +61,11 @@ public class PlayerGameController {
   @PostMapping(value = "/player-game-info-data", produces = MediaType.APPLICATION_JSON_VALUE)
   public List<PlayerGameFactEntity> getData(@RequestBody GenericRequestBody request) throws Exception {
     log.info("START: GET Player Game");
+    Instant startTime = Instant.now();
     List<PlayerGameFactEntity> data = playerGameService.getPlayerGames(request);
-    log.info("END: GET Player Game");
+    Instant endTime = Instant.now();
+
+    log.info("END: GET Player Game, timeElasped: {}", Duration.between(startTime, endTime).toMillis());
     return data;
   }
 

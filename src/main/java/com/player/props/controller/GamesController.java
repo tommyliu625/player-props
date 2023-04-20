@@ -1,6 +1,8 @@
 package com.player.props.controller;
 
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -65,8 +67,10 @@ public class GamesController {
   @PostMapping(value = "/games-info-data", produces = "application/json")
   public List<GamesFactEntity> getGamesData(@RequestBody GenericRequestBody request) throws Exception {
     log.info("START: GET Games Data");
+    Instant startTime = Instant.now();
     List<GamesFactEntity> result = gameService.getGamesData(request);
-    log.info("END: GET Games Data");
+    Instant endTime = Instant.now();
+    log.info("END: GET Games Data, timeElapsed: {}", Duration.between(startTime, endTime).toMillis());
     return result;
   }
 

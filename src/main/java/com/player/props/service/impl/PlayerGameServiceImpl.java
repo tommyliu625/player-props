@@ -19,7 +19,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -46,6 +49,7 @@ public class PlayerGameServiceImpl implements PlayerGameService {
 
   private static String BDL_ATTRIBUTE = "stats";
 
+  @Cacheable(value = "playerGameInfo")
   @Override
   public List<PlayerGameFactEntity> getPlayerGames(GenericRequestBody requestBody) throws Exception {
     List<PlayerGameFactEntity> result = null;
@@ -225,5 +229,11 @@ public class PlayerGameServiceImpl implements PlayerGameService {
     entity.setPostseason(info.getGame().isPostseason());
     entity.setSeason(info.getGame().getSeason());
     return entity;
+  }
+
+  @CacheEvict(value = "playerGameInfo", allEntries = true)
+  @Scheduled(fixedRate = 3600000)
+  public void emptyPlayerGameInfoCache() {
+    log.info("emptying playerGameInfo cache");
   }
 }

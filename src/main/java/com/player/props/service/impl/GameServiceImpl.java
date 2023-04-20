@@ -21,7 +21,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -47,7 +50,7 @@ public class GameServiceImpl implements GameService {
 
   private static String BDL_ATTRIBUTE = "games";
 
-
+  // @Cacheable(value = "gameInfo")
   @Override
   public List<GamesFactEntity> getGamesData(GenericRequestBody request) {
     Map<String, Map<String, Object>> whereMap = request.getWhere();
@@ -216,5 +219,11 @@ public class GameServiceImpl implements GameService {
     RestTemplate restTemplate = new RestTemplate();
     ResponseEntity<BDLGameInfoResponse> responseEntity = restTemplate.getForEntity(url, BDLGameInfoResponse.class);
     return responseEntity.getBody();
+  }
+
+  @CacheEvict(value = "gameInfo", allEntries = true)
+  @Scheduled(fixedRate = 3600000)
+  public void emptyGameInfoCache() {
+    log.info("emptying gameInfo cache");
   }
 }

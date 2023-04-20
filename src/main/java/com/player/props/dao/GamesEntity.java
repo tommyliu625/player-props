@@ -22,7 +22,7 @@ public class GamesEntity {
 
   @Column(name = "date")
   private Date date;
-
+  
   @Column(name = "ht_id")
   private String ht_id;
 

@@ -62,8 +62,10 @@ public class CriteriaBuilderUtil {
   public static Predicate buildDatesPredicate(Root<?> root, CriteriaBuilder criteriaBuilder, String startDate, String endDate) {
     List<Predicate> conditionsList = new ArrayList<Predicate>();
     Predicate startDatePred = criteriaBuilder.greaterThanOrEqualTo(root.<Date>get("date"), Date.valueOf(startDate));
+    // Predicate startDatePred = criteriaBuilder.greaterThanOrEqualTo(root.get("date"), startDate);
     conditionsList.add(startDatePred);
-    Predicate endDatePred = criteriaBuilder.lessThan(root.<Date>get("date"), Date.valueOf(endDate));
+    Predicate endDatePred = criteriaBuilder.lessThanOrEqualTo(root.<Date>get("date"), Date.valueOf(endDate));
+    // Predicate endDatePred = criteriaBuilder.lessThan(root.get("date"), endDate);
     conditionsList.add(endDatePred);
     return criteriaBuilder.and(conditionsList.toArray(new Predicate[]{}));
     // return conditionsList;

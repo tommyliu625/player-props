@@ -15,7 +15,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,6 +45,7 @@ public class PlayerInfoServiceImpl implements PlayerInfoService {
   @Autowired
   EntityManagerFactory emf;
 
+  @Cacheable(value = "playerInfo")
   @Override
   public List<PlayerInfoDistinctEntity> getPlayerData(GenericRequestBody request) {
   Map<String, Map<String, Object>> whereMap = request.getWhere();
@@ -159,5 +163,17 @@ public class PlayerInfoServiceImpl implements PlayerInfoService {
     RestTemplate restTemplate = new RestTemplate();
     ResponseEntity<BDLPlayerInfoResponse> response = restTemplate.getForEntity(newUrl, BDLPlayerInfoResponse.class);
     return response.getBody();
+  }
+
+  @CacheEvict(value = "playerInfo", allEntries = true)
+  @Scheduled(fixedRate = 86400000)
+  public void emptyPlayerInfoCache() {
+    log.info("emptying playerInfo cache");
+  }
+
+  @CacheEvict(value = "teamInfo", allEntries = true)
+  @Scheduled(fixedRate = 86400000)
+  public void emptyTeamInfoCache() {
+    log.info("emptying teamInfo cache");
   }
 }
