@@ -50,7 +50,7 @@ public class GameServiceImpl implements GameService {
 
   private static String BDL_ATTRIBUTE = "games";
 
-  // @Cacheable(value = "gameInfo")
+  @Cacheable(value = "gameInfo")
   @Override
   public List<GamesFactEntity> getGamesData(GenericRequestBody request) {
     Map<String, Map<String, Object>> whereMap = request.getWhere();
@@ -223,7 +223,7 @@ public class GameServiceImpl implements GameService {
   }
 
   @CacheEvict(value = "gameInfo", allEntries = true)
-  @Scheduled(fixedRate = 3600000)
+  @Scheduled(fixedRate = 86400000)
   public void emptyGameInfoCache() {
     log.info("emptying gameInfo cache");
   }

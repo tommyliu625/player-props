@@ -26,6 +26,7 @@ import com.player.props.dao.GamesEntity;
 import com.player.props.dao.GamesFactEntity;
 import com.player.props.model.request.GenericRequestBody;
 import com.player.props.model.response.SuccessfulSaveResponse;
+import com.player.props.processor.GameProc;
 import com.player.props.service.GameService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,9 @@ public class GamesController {
 
   @Autowired
   GameService gameService;
+
+  @Autowired
+  GameProc gameProc;
 
   @Autowired
   EntityManagerFactory emf;
@@ -72,6 +76,13 @@ public class GamesController {
     Instant endTime = Instant.now();
     log.info("END: GET Games Data, timeElapsed: {}", Duration.between(startTime, endTime).toMillis());
     return result;
+  }
+
+  @GetMapping(value = "/games-info-normalize", produces = "application/json")
+  public void normalizeGames() {
+    log.info("START: Normalizing Games");
+    gameProc.normalize();
+    log.info("END: Normalizing Games");
   }
 
   @PostMapping(value = "/games-info", produces = "application/json")

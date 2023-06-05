@@ -232,7 +232,7 @@ public class PlayerGameServiceImpl implements PlayerGameService {
   }
 
   @CacheEvict(value = "playerGameInfo", allEntries = true)
-  @Scheduled(fixedRate = 3600000)
+  @Scheduled(fixedRate = 86400000)
   public void emptyPlayerGameInfoCache() {
     log.info("emptying playerGameInfo cache");
   }

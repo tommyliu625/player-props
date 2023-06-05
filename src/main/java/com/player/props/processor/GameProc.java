@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.player.props.service.GameService;
+import com.player.props.service.impl.GameServiceImpl;
 import com.player.props.sqlexec.SQLCommandExecutor;
 
 import static com.player.props.constants.DbConstants.*;
@@ -16,16 +17,15 @@ public class GameProc {
 
   SQLCommandExecutor sqlCommandExecutor;
 
-  GameService gameService;
+  GameServiceImpl gameService;
 
-  GameProc(SQLCommandExecutor sqlCommandExecutor, GameService gameService) {
+  GameProc(SQLCommandExecutor sqlCommandExecutor, GameServiceImpl gameService) {
     this.sqlCommandExecutor = sqlCommandExecutor;
     this.gameService = gameService;
   }
 
-  public boolean process() {
-    String truncate_staging_table = String.format("truncate %1$s", GAME_HISTORY_STAGING_TABLE);
-    String insert_to_fact_target = String.format("INSERT INTO %2$s select \n " +
+  String truncate_staging_table = String.format("truncate %1$s", GAME_HISTORY_STAGING_TABLE);
+  String insert_to_fact_target = String.format("INSERT INTO %2$s select \n " +
       "gh.game_id, \n" +
       "gh.date, \n" +
       "gh.ht_id as ht_id, \n" +
@@ -44,7 +44,10 @@ public class GameProc {
       "gh.at_score, \n" +
       "gh.postseason, \n" +
       "gh.season \n" +
-    "from %1$s gh left join team_info ht on gh.ht_id = ht.team_id left join team_info awayt on gh.at_id = awayt.team_id;", GAME_HISTORY_STAGING_TABLE, GAME_HISTORY_TARGET_TABLE);
+      "from %1$s gh left join team_info ht on gh.ht_id = ht.team_id left join team_info awayt on gh.at_id = awayt.team_id;",
+      GAME_HISTORY_STAGING_TABLE, GAME_HISTORY_TARGET_TABLE);
+
+  public boolean process() {
 
     try {
       boolean executeStatus;
@@ -63,4 +66,15 @@ public class GameProc {
     }
     return false;
   }
+
+  public void normalize() {
+    try {
+      boolean executeStatus;
+      executeStatus = sqlCommandExecutor.execute(insert_to_fact_target);
+      log.info("SQL Exec Status inserting to normalized target {} with status {}", insert_to_fact_target, executeStatus);
+    } catch (Exception e) {
+      log.error(e.getLocalizedMessage());
+    }
+  }
+
 }

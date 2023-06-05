@@ -23,6 +23,7 @@ import com.player.props.dao.PlayerGameEntity;
 import com.player.props.dao.PlayerGameFactEntity;
 import com.player.props.model.request.GenericRequestBody;
 import com.player.props.model.response.SuccessfulSaveResponse;
+import com.player.props.processor.PlayerGameProc;
 import com.player.props.service.PlayerGameService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,18 +38,20 @@ public class PlayerGameController {
   EntityManagerFactory emf;
 
   @Autowired
+  PlayerGameProc playerGameProc;
+
+  @Autowired
   PlayerGameService playerGameService;
 
   @GetMapping(value = "/player-game-info", produces = MediaType.APPLICATION_JSON_VALUE)
   public List<PlayerGameEntity> getPlayerGameInfo(@RequestParam Map<String, String> params) {
-
 
     EntityManager em = null;
     List<PlayerGameEntity> result = null;
     try {
       em = emf.createEntityManager();
       em.getTransaction().begin();
-      TypedQuery<PlayerGameEntity> query =  em.createQuery("SELECT e FROM PlayerGameEntity e", PlayerGameEntity.class);
+      TypedQuery<PlayerGameEntity> query = em.createQuery("SELECT e FROM PlayerGameEntity e", PlayerGameEntity.class);
       if (query.getResultList() != null) {
         result = query.getResultList();
       }
@@ -64,7 +67,6 @@ public class PlayerGameController {
     Instant startTime = Instant.now();
     List<PlayerGameFactEntity> data = playerGameService.getPlayerGames(request);
     Instant endTime = Instant.now();
-
     log.info("END: GET Player Game, timeElasped: {}", Duration.between(startTime, endTime).toMillis());
     return data;
   }
@@ -84,5 +86,12 @@ public class PlayerGameController {
     SuccessfulSaveResponse saveResponse = playerGameService.savePlayerGames(params);
     log.info("END: POST Save Player Game");
     return saveResponse;
+  }
+
+  @GetMapping(value = "/player-game-info-normalize", produces = "application/json")
+  public void normalizePlayerGames() {
+    log.info("START: Normalizing Player Games");
+    playerGameProc.normalize();
+    log.info("END: Normalizing PlayerGames");
   }
 }

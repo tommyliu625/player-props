@@ -31,10 +31,10 @@ public class RunProcess {
     // TODO Auto-generated method stub
     try {
       log.info("Starting normalization process");
-      // if (playerInfoProc.process() != true) {
-      //   log.error("Error with Normalization process");
-      //   throw new Exception();
-      // }
+      if (playerInfoProc.process() != true) {
+        log.error("Error with Normalization process");
+        throw new Exception();
+      }
       if (gameProc.process() != true) {
         log.error("Error with Normalization process");
         throw new Exception();
