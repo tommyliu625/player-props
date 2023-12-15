@@ -2,6 +2,7 @@ package com.player.props.util;
 
 import java.sql.Date;
 import java.text.ParseException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -26,5 +27,7 @@ public class DateUtil {
     String yesterday = LocalDate.now().minusDays(1).format(formatter);
     return yesterday;
   }
+
+  public static Instant lastProjectionsUpdated = Instant.now();
 
 }

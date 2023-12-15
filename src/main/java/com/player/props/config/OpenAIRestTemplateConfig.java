@@ -1,5 +1,7 @@
 package com.player.props.config;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class OpenAIRestTemplateConfig {
 
-    private String openaiApiKey = "";
+    private String openaiApiKey = System.getenv("openaikey");
 
     @Bean
     @Qualifier("openaiRestTemplate")

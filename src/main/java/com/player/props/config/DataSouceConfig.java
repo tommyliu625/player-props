@@ -24,11 +24,10 @@ public class DataSouceConfig {
   @Value("${postgres.properties.user}")
   private String user;
 
-  @Value("${postgres.properties.pw}")
-  private String pw;
-
   @Value("${postgres.properties.driver}")
   private String driver;
+
+  private String pw = System.getenv("rdspw");
 
   @Bean
   public HikariDataSource createDataSource() {

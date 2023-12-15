@@ -24,6 +24,7 @@ public class GameProc {
     this.gameService = gameService;
   }
 
+  // String truncate_staging_table = String.format("truncate %1$s", GAME_HISTORY_STAGING_TABLE);
   String truncate_staging_table = String.format("truncate %1$s", GAME_HISTORY_STAGING_TABLE);
   String insert_to_fact_target = String.format("INSERT INTO %2$s select \n " +
       "gh.game_id, \n" +
@@ -45,7 +46,8 @@ public class GameProc {
       "gh.postseason, \n" +
       "gh.season \n" +
       "from %1$s gh left join team_info ht on gh.ht_id = ht.team_id left join team_info awayt on gh.at_id = awayt.team_id;",
-      GAME_HISTORY_STAGING_TABLE, GAME_HISTORY_TARGET_TABLE);
+      // GAME_HISTORY_STAGING_FULL_TABLE, GAME_HISTORY_TARGET_FACT_TABLE);
+      GAME_HISTORY_STAGING_TABLE, GAME_HISTORY_TARGET_FACT_TABLE);
 
   public boolean process() {
 

@@ -5,14 +5,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import static com.player.props.constants.DbConstants.GAME_HISTORY_TARGET_TABLE;
+import static com.player.props.constants.DbConstants.GAME_HISTORY_TARGET_FACT_TABLE;
 
 import java.sql.Date;
 
 import lombok.Data;
 
 @Entity
-@Table(name = GAME_HISTORY_TARGET_TABLE)
+@Table(name = GAME_HISTORY_TARGET_FACT_TABLE)
 @Data
 public class GamesFactEntity {
 

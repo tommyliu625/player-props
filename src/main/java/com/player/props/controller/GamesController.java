@@ -22,8 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.player.props.dao.GamesEntity;
+import com.player.props.dao.ANOT_NEEDED_GamesEntity;
 import com.player.props.dao.GamesFactEntity;
+import com.player.props.dao.GamesEntity;
 import com.player.props.model.request.GenericRequestBody;
 import com.player.props.model.response.SuccessfulSaveResponse;
 import com.player.props.processor.GameProc;
@@ -68,6 +69,7 @@ public class GamesController {
     return result;
   }
 
+  // dynamic query to get list of games
   @PostMapping(value = "/games-info-data", produces = "application/json")
   public List<GamesFactEntity> getGamesData(@RequestBody GenericRequestBody request) throws Exception {
     log.info("START: GET Games Data");
@@ -77,6 +79,7 @@ public class GamesController {
     log.info("END: GET Games Data, timeElapsed: {}", Duration.between(startTime, endTime).toMillis());
     return result;
   }
+  
 
   @GetMapping(value = "/games-info-normalize", produces = "application/json")
   public void normalizeGames() {
@@ -85,7 +88,8 @@ public class GamesController {
     log.info("END: Normalizing Games");
   }
 
-  @PostMapping(value = "/games-info", produces = "application/json")
+  // this method gets the game info in a time range up to the current date
+  @PostMapping(value = "/save-game-info", produces = "application/json")
   public SuccessfulSaveResponse saveGames(@RequestParam Map<String, String> params) throws Exception {
 
     log.info("START: POST Save Games");

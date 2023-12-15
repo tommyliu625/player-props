@@ -19,6 +19,7 @@ import com.player.props.config.DbConfig;
 import com.player.props.processor.GameProc;
 import com.player.props.processor.PlayerGameProc;
 import com.player.props.processor.PlayerInfoProc;
+import com.player.props.processor.PlayerPropsProc;
 import com.player.props.processor.RunProcess;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,9 @@ public class SQLExecutorController {
 
   @Autowired
   GameProc gameProc;
+
+  @Autowired
+  PlayerPropsProc playerPropsProc;
 
   @Autowired
   RunProcess runProcess;
@@ -73,6 +77,15 @@ public class SQLExecutorController {
     log.info("Starting Player Info Processor");
     boolean res = playerGameProc.process();
     log.info("Ending Player Info Processor");
+    return res;
+  }
+
+  @GetMapping(value = "/player-prop-sql-exec", produces = MediaType.
+  APPLICATION_JSON_VALUE)
+  public boolean execSqlPlayerProp() {
+    log.info("Starting Player Prop Processor");
+    boolean res = playerPropsProc.process();
+    log.info("Ending Player Prop Processor");
     return res;
   }
 

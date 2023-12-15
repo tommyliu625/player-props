@@ -55,7 +55,7 @@ public class PlayerGameProc {
       "from %1$s as pgh left join %3$s as pi on pgh.player_id = pi.player_id left join %4$s as ti on pgh.team_id = ti.team_id \n"
       +
       "left join %5$s gh on gh.game_id = pgh.game_id", PLAYER_GAME_HISTORY_STAGING_TABLE,
-      PLAYER_GAME_HISTORY_TARGET_TABLE, PLAYER_INFO_TARGET_TABLE, TEAM_INFO_TABLE, GAME_HISTORY_TARGET_TABLE);
+      PLAYER_GAME_HISTORY_TARGET_TABLE, PLAYER_INFO_TARGET_TABLE, TEAM_INFO_TABLE, GAME_HISTORY_TARGET_FACT_TABLE);
 
   String truncate_player_info_distinct = String.format("truncate %1$s", PLAYER_INFO_DISTINCT_TABLE);
 

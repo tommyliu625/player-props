@@ -2,5 +2,17 @@ postgres:
   properties:
     url: jdbc:postgresql://player-props-db.cmmimhasgknf.us-east-1.rds.amazonaws.com:5432/playerprops?useSSL=true
     user: postgres
-    pw: whothem4n
     driver: org.postgresql.Driver
+
+aws:
+  credentials:
+    access-key: REPLACE_WITH_YOUR_ACCESS_KEY
+    secret-key: REPLACE_WITH_YOUR_SECRET_KEY
+  region:
+    static: us-east-1
+  stack:
+    auto: false
+
+application:
+  bucket:
+    name: nba-prize-picks

@@ -13,6 +13,8 @@ public class GenericRequestBody {
 
   int limit;
 
+  int offset;
+
   String start_date;
 
   String end_date;

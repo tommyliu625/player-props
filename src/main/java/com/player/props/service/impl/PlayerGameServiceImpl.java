@@ -26,7 +26,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.player.props.dao.PlayerGameEntity;
+import com.player.props.dao.PlayerPropsEntity;
 import com.player.props.dao.PlayerGameFactEntity;
 import com.player.props.model.request.BDLPlayerGameInfo;
 import com.player.props.model.request.BDLPlayerGameInfoResponse;
@@ -102,14 +102,15 @@ public class PlayerGameServiceImpl implements PlayerGameService {
     return result;
   }
 
-
+  // this method gets the player game info for the last day
+  // used during the cron job
   @Override
   public SuccessfulSaveResponse startJob() throws Exception {
     SuccessfulSaveResponse saveResponse = new SuccessfulSaveResponse();
     log.info("Starting Player Game Job");
 
     int page = 1;
-    String url = BdlUtil.buildUrl(yesterdayStr(), page, BDL_ATTRIBUTE);
+    String url = BdlUtil.buildUrl(DateUtil.yesterdayStr(), page, BDL_ATTRIBUTE);
     log.info("Calling -> {}", url);
 
     BDLPlayerGameInfoResponse response = getResponse(url);
@@ -126,6 +127,7 @@ public class PlayerGameServiceImpl implements PlayerGameService {
     return saveResponse;
   }
 
+  // this method gets the player game info in a time range up to the current date
   @Override
   public SuccessfulSaveResponse savePlayerGames(Map<String, String> params) throws Exception {
     int page = 1;
@@ -195,7 +197,7 @@ public class PlayerGameServiceImpl implements PlayerGameService {
     try {
       em.getTransaction().begin();
       for (BDLPlayerGameInfo info : data) {
-        PlayerGameEntity entity = mapEntity(info);
+        PlayerPropsEntity entity = mapEntity(info);
         em.persist(entity);
       }
       em.getTransaction().commit();
@@ -210,8 +212,8 @@ public class PlayerGameServiceImpl implements PlayerGameService {
     }
   }
 
-  private PlayerGameEntity mapEntity(BDLPlayerGameInfo info) throws Exception {
-    PlayerGameEntity entity = new PlayerGameEntity();
+  private PlayerPropsEntity mapEntity(BDLPlayerGameInfo info) throws Exception {
+    PlayerPropsEntity entity = new PlayerPropsEntity();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     entity.setPlayer_game_id(Integer.toString(info.getId()));
     entity.setPlayer_id(Integer.toString(info.getPlayer().getId()));
@@ -222,7 +224,15 @@ public class PlayerGameServiceImpl implements PlayerGameService {
     entity.setPts(info.getPts());
     entity.setRbs(info.getReb());
     entity.setAsts(info.getAst());
+    entity.setFg3a(info.getFg3a());
     entity.setFg3m(info.getFg3m());
+    entity.setFg3_pct(info.getFg3_pct());
+    entity.setFg_pct(info.getFg_pct());
+    entity.setFga(info.getFga());
+    entity.setFgm(info.getFgm());
+    entity.setFt_pct(info.getFt_pct());
+    entity.setFta(info.getFta());
+    entity.setFtm(info.getFtm());
     entity.setBlks(info.getBlk());
     entity.setStls(info.getStl());
     entity.setTos(info.getTurnover());

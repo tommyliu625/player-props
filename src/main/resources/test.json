@@ -1,0 +1,119 @@
+{
+    "projectionStats": {
+        "Points": [
+            {
+                "firstame": "Jaylen",
+                "lastName": "Brown",
+                "fullName": "Jaylen Brown",
+                "playerId": "1627759",
+                "line_score": "19",
+                "line_history": [
+                    {
+                        "date": "2023-11-19",
+                        "line_score": 20,
+                        "hit": "true"
+                    },
+                    {
+                        "date": "2023-11-18",
+                        "line_score": 18,
+                        "hit": "true"
+                    }
+                ]
+            },
+            {
+                "firstame": "Tyrese",
+                "lastName": "Haliburton",
+                "fullName": "Tyrese Haliburton",
+                "playerId": "1628369",
+                "line_score": "18"
+            }
+        ],
+        "Rebounds": [
+            {
+                "firstame": "Jaylen",
+                "lastName": "Brown",
+                "fullName": "Jaylen Brown",
+                "playerId": "1627759",
+                "line_score": "5"
+            }
+        ]
+    },
+    "gameHistory": {
+        "1627759": [
+            {
+                "date": "2022-10-20 00:00:00",
+                "pts": 35,
+                "rbs": 3,
+                "asts": 2,
+                "fgm": 14,
+                "fga": 24,
+                "fg_pct": 0.583,
+                "fg3m": 4,
+                "fg3a": 12,
+                "fg3_pct": 0.333,
+                "ftm": 3,
+                "fta": 3,
+                "ft_pct": 1,
+                "blks": 1,
+                "stls": 2,
+                "tos": 4
+            },
+            {
+                "date": "2022-10-18 00:00:00",
+                "pts": 35,
+                "rbs": 12,
+                "asts": 4,
+                "fgm": 13,
+                "fga": 20,
+                "fg_pct": 0.65,
+                "fg3m": 2,
+                "fg3a": 7,
+                "fg3_pct": 0.286,
+                "ftm": 7,
+                "fta": 9,
+                "ft_pct": 0.778,
+                "blks": 1,
+                "stls": 1,
+                "tos": 3
+            }
+        ],
+        "1628369": [
+            {
+                "date": "2022-10-20 00:00:00",
+                "pts": 35,
+                "rbs": 3,
+                "asts": 2,
+                "fgm": 14,
+                "fga": 24,
+                "fg_pct": 0.583,
+                "fg3m": 4,
+                "fg3a": 12,
+                "fg3_pct": 0.333,
+                "ftm": 3,
+                "fta": 3,
+                "ft_pct": 1,
+                "blks": 1,
+                "stls": 2,
+                "tos": 4
+            },
+            {
+                "date": "2022-10-18 00:00:00",
+                "pts": 35,
+                "rbs": 12,
+                "asts": 4,
+                "fgm": 13,
+                "fga": 20,
+                "fg_pct": 0.65,
+                "fg3m": 2,
+                "fg3a": 7,
+                "fg3_pct": 0.286,
+                "ftm": 7,
+                "fta": 9,
+                "ft_pct": 0.778,
+                "blks": 1,
+                "stls": 1,
+                "tos": 3
+            }
+        ]
+    }
+}

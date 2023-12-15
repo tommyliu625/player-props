@@ -5,6 +5,8 @@ import static com.player.props.constants.BDLConstants.BDL_URL;
 
 import java.util.List;
 
+import org.springframework.util.ObjectUtils;
+
 import com.player.props.model.response.SuccessfulSaveResponse;
 
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +18,10 @@ public class BdlUtil {
     StringBuilder str = new StringBuilder(BDL_URL);
     str.append(attribute);
     str.append("?");
-    str.append("seasons[]").append("=").append("2022");
-    str.append("&per_page").append("=").append(100);
+    // str.append("seasons[]").append("=").append("2023&");
+    str.append("per_page").append("=").append(100);
 
-    if (date != "") {
+    if (!ObjectUtils.isEmpty(date)) {
       str.append("&start_date").append("=").append(date);
       str.append("&end_date").append("=").append(date);
     }

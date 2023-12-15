@@ -28,6 +28,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.player.props.dao.ANOT_NEEDED_GamesEntity;
+import com.player.props.dao.GamesFactEntity;
 import com.player.props.dao.GamesEntity;
 import com.player.props.dao.GamesFactEntity;
 import com.player.props.model.request.BDLGameInfo;
@@ -58,6 +60,7 @@ public class GameServiceImpl implements GameService {
     String startDate = request.getStart_date();
     String endDate = request.getEnd_date();
     Integer limit = Integer.valueOf(request.getLimit());
+    Integer offset = Integer.valueOf(request.getOffset());
 
     List<GamesFactEntity> result = new ArrayList<>();
     EntityManager em = null;
@@ -90,6 +93,7 @@ public class GameServiceImpl implements GameService {
       }
       TypedQuery<GamesFactEntity> typedQuery = em.createQuery(query);
       if (limit > 0) {
+        typedQuery.setFirstResult(offset);
         typedQuery.setMaxResults(limit);
       }
       result = typedQuery.getResultList();
@@ -125,6 +129,7 @@ public class GameServiceImpl implements GameService {
     return saveResponse;
   }
 
+  // this method gets the game info in a time range up to the current date
   public SuccessfulSaveResponse saveGames(
       Map<String, String> params) throws InterruptedException, ParseException, Exception {
     int page = 1;

@@ -1,23 +1,15 @@
 package com.player.props.util;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import com.player.props.dao.PlayerGameEntity;
-import com.player.props.dao.PlayerGameFactEntity;
 
 public class CriteriaBuilderUtil {
 
@@ -39,7 +31,10 @@ public class CriteriaBuilderUtil {
         Predicate predicate;
         if (value instanceof List) {
           predicate = root.get(key).in(value);
-        } else {
+        } else if (key.equals("min")) {
+          predicate = criteriaBuilder.greaterThan(root.get(key), 0);  
+        }
+        else {
           predicate = criteriaBuilder.equal(root.get(key), value);
         }
         conditionPredicate.add(predicate);

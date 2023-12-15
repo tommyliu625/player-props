@@ -5,25 +5,49 @@ import lombok.Data;
 @Data
 public class BDLPlayerGameInfo {
 
-  private int id;
+  public int id;
 
-  private int ast;
+  public int pts;
 
-  private int blk;
+  public int reb;
+  
+  public int ast;
+  
+  public int stl;
 
-  private int fg3m;
+  public int blk;
 
-  private BDLGameInfo game;
+  public int oreb;
 
-  private BDLPlayerInfo player;
+  public int dreb;
 
-  private int pts;
+  public int pf;
 
-  private int reb;
+  public String min;
 
-  private int stl;
+  public int fg3a;
+  
+  public int fg3m;
 
-  private BDLTeamInfo team;
+  public double fg3_pct;
 
-  private int turnover;
+  public double fg_pct;
+
+  public int fga;
+
+  public int fgm;
+
+  public double ft_pct;
+
+  public int fta;
+
+  public int ftm;
+
+  public BDLGameInfo game;
+
+  public BDLPlayerInfo player;
+
+  public BDLTeamInfo team;
+
+  public int turnover;
 }
