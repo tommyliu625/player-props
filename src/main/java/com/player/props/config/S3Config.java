@@ -14,9 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 @Configuration
 public class S3Config {
 
-    @Value("${application.bucket.name}")
-    private String bucketName;
-
     @Value("${aws.region.static}")
     private String region;
 

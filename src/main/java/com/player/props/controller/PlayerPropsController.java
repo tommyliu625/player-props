@@ -27,6 +27,7 @@ import com.player.props.model.response.ProjectionsResponse;
 import com.player.props.model.response.SuccessfulSaveResponse;
 import com.player.props.processor.PlayerPropsProc;
 import com.player.props.service.impl.PrizePicksProjectionsServiceImpl;
+import com.player.props.service.impl.UnderdogProjectionsServiceImpl;
 import com.player.props.util.DateUtil;
 import com.player.props.service.impl.PlayerPropsServiceImpl;
 
@@ -49,6 +50,9 @@ public class PlayerPropsController {
 
   @Autowired
   PrizePicksProjectionsServiceImpl picksProjectionsService;
+
+  @Autowired
+  UnderdogProjectionsServiceImpl underdogProjectionsServiceImpl;
 
   @GetMapping(value = "/player-game-info", produces = MediaType.APPLICATION_JSON_VALUE)
   public List<PlayerPropsEntity> getPlayerGameInfo(@RequestParam Map<String, String> params) {
@@ -80,12 +84,23 @@ public class PlayerPropsController {
   }
 
   // gets player props against opponent
-  @PostMapping(value = "/fetch-props-against-opponent", produces = MediaType.APPLICATION_JSON_VALUE)
-  public List<LineHistory> getPropsAgainstOpponent(@RequestBody GenericRequestBody request, @RequestParam String statType, @RequestParam Double lineScore) throws Exception {
+  @PostMapping(value = "/fetch-props-against-opponent-prize-picks", produces = MediaType.APPLICATION_JSON_VALUE)
+  public List<LineHistory> getPropsAgainstOpponentPrizePicks(@RequestBody GenericRequestBody request, @RequestParam String statType, @RequestParam Double lineScore) throws Exception {
     log.info("START: GET Player Props");
     Instant startTime = Instant.now();
     List<PlayerStatsResponse> data = playerPropsService.getPlayerProps(request);
     List<LineHistory> mappedData = picksProjectionsService.getPlayerPropsAgainstOpponent(data, statType, lineScore);
+    Instant endTime = Instant.now();
+    log.info("END: GET Player Props, timeElasped: {}", Duration.between(startTime, endTime).toMillis());
+    return mappedData;
+  }
+
+  @PostMapping(value = "/fetch-props-against-opponent-underdog", produces = MediaType.APPLICATION_JSON_VALUE)
+  public List<LineHistory> getPropsAgainstOpponentUnderdog(@RequestBody GenericRequestBody request, @RequestParam String statType, @RequestParam Double lineScore) throws Exception {
+    log.info("START: GET Player Props");
+    Instant startTime = Instant.now();
+    List<PlayerStatsResponse> data = playerPropsService.getPlayerProps(request);
+    List<LineHistory> mappedData = underdogProjectionsServiceImpl.getPlayerPropsAgainstOpponent(data, statType, lineScore);
     Instant endTime = Instant.now();
     log.info("END: GET Player Props, timeElasped: {}", Duration.between(startTime, endTime).toMillis());
     return mappedData;
@@ -101,16 +116,29 @@ public class PlayerPropsController {
   }
   
   // fetches prize picks projections
-  @GetMapping(value = "/fetch-player-projections", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ProjectionsResponse getPlayerProjections() throws Exception {
-    log.info("START: GET Player Projections");
+  @GetMapping(value = "/fetch-prize-picks-projections", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ProjectionsResponse getPrizePicksProjections() throws Exception {
+    log.info("START: GET Prize Picks Projections");
     Instant startTime = Instant.now();
-    Long lastUpload = Duration.between(DateUtil.lastProjectionsUpdated, startTime).toMillis();
+    Long lastUpload = Duration.between(DateUtil.prizePickLastUpdated, startTime).toMillis();
     log.info("Time difference between last upload and now {}ms", lastUpload);
     if (lastUpload < 6000) Thread.sleep(6000 - lastUpload);
     ProjectionsResponse data = picksProjectionsService.getPlayerProjections();
-    Instant endTime = Instant.now();
-    log.info("END: GET Player Projections, timeElasped: {}", Duration.between(startTime, endTime).toMillis());
+    data.setLastUpdated(DateUtil.formatInstant(DateUtil.prizePickLastUpdated));
+    // log.info("END: GET Prize Picks Projections, timeElasped: {}", Duration.between(startTime, endTime).toMillis());
+    return data;
+  }
+
+  @GetMapping(value = "/fetch-underdog-projections", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ProjectionsResponse getUnderdogProjections() throws Exception {
+    log.info("START: GET Underdog Projections");
+    Instant startTime = Instant.now();
+    Long lastUpload = Duration.between(DateUtil.underdogLastUpdated, startTime).toMillis();
+    log.info("Time difference between last upload and now {}ms", lastUpload);
+    if (lastUpload < 6000) Thread.sleep(6000 - lastUpload);
+    ProjectionsResponse data = underdogProjectionsServiceImpl.getPlayerProjections();
+    data.setLastUpdated(DateUtil.formatInstant(DateUtil.underdogLastUpdated));
+    // log.info("END: GET Underdog Projections, timeElasped: {}", Duration.between(startTime, endTime).toMillis());
     return data;
   }
   

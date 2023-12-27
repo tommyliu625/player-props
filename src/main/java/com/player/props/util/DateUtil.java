@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateUtil {
@@ -28,6 +30,15 @@ public class DateUtil {
     return yesterday;
   }
 
-  public static Instant lastProjectionsUpdated = Instant.now();
+  public static Instant underdogLastUpdated = Instant.now();
 
+  public static Instant prizePickLastUpdated = Instant.now();
+
+  static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+  public static String formatInstant(Instant instant) {
+    ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
+    return formatter.format(zonedDateTime);
+  }
+  
 }

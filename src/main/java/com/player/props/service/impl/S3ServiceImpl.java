@@ -22,14 +22,18 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class S3ServiceImpl {
     
-    @Value("${application.bucket.name}")
-    private String bucketName;
+    @Value("${application.prize-picks-bucket.name}")
+    private String prizePicksBucketName;
+
+    @Value("${application.underdog-bucket.name}")
+    private String underdogBucketName;
 
     @Autowired
     private AmazonS3 s3Client;
 
     // upload a file to S3
-    public String uploadFile(MultipartFile file) {
+    public String uploadFile(MultipartFile file, String sportsBook) {
+        String bucketName = sportsBook.equals("prize-picks") ? prizePicksBucketName : underdogBucketName;
         File fileObj = convertMultiPartFileToFile(file);
         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
         s3Client.putObject(new PutObjectRequest(bucketName, fileName, fileObj));
@@ -37,14 +41,16 @@ public class S3ServiceImpl {
         return "File Uploaded: " + fileName + " to bucket: " + bucketName + " at " + s3Client.getUrl(bucketName, fileName).toString();
     }
 
-    public String uploadFile(Path filePath) {
+    public String uploadFile(Path filePath, String sportsBook) {
+        String bucketName = sportsBook.equals("prize-picks") ? prizePicksBucketName : underdogBucketName;
         File file = filePath.toFile();
         String fileName = System.currentTimeMillis() + "_" + file.getName();
         s3Client.putObject(new PutObjectRequest(bucketName, fileName, file));
         return "File Uploaded: " + fileName + " to bucket: " + bucketName + " at " + s3Client.getUrl(bucketName, fileName).toString();
     }
 
-    public byte[] downloadFile(String fileName) {
+    public byte[] downloadFile(String fileName, String sportsBook) {
+        String bucketName = sportsBook.equals("prize-picks") ? prizePicksBucketName : underdogBucketName;
         S3Object s3Object = s3Client.getObject(bucketName, fileName);
         S3ObjectInputStream inputStream = s3Object.getObjectContent();
         try {
@@ -57,7 +63,8 @@ public class S3ServiceImpl {
         return null;
     }
 
-    public String deleteFile(String fileName) {
+    public String deleteFile(String fileName, String sportsBook) {
+        String bucketName = sportsBook.equals("prize-picks") ? prizePicksBucketName : underdogBucketName;
         s3Client.deleteObject(bucketName, fileName);
         return "File deleted: " + fileName + " from bucket: " + bucketName + " at " + s3Client.getUrl(bucketName, fileName).toString();
     }

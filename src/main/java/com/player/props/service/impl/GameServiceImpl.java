@@ -28,10 +28,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.player.props.dao.ANOT_NEEDED_GamesEntity;
 import com.player.props.dao.GamesFactEntity;
 import com.player.props.dao.GamesEntity;
-import com.player.props.dao.GamesFactEntity;
 import com.player.props.model.request.BDLGameInfo;
 import com.player.props.model.request.BDLGameInfoResponse;
 import com.player.props.model.request.GenericRequestBody;

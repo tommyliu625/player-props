@@ -30,6 +30,7 @@ import com.player.props.util.mappers.PlayerStatsEntityToResponseMapper;
 import com.player.props.model.response.LineHistory;
 import static com.player.props.util.ProjectionUtil.comboToDbMapper;
 import static com.player.props.util.ProjectionUtil.prizePicksToDbMapper;
+import static com.player.props.util.ProjectionUtil.calculatePercentage;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -122,6 +123,7 @@ public class PrizePicksProjectionsServiceImpl {
       Map<String, List<PlayerPropsFactEntity>> playersLast10GamesMap) {
     List<PlayerProjectionInformation> hotStreaks = new ArrayList<>();
     List<PlayerProjectionInformation> frequentlyHit = new ArrayList<>();
+    List<PlayerProjectionInformation> allProjections = new ArrayList<>();
     for (Map.Entry<String, List<PlayerProjectionInformation>> infoMap : playerProjectionInformationMap.entrySet()) {
       String statType = infoMap.getKey();
       List<PlayerProjectionInformation> infoList = infoMap.getValue();
@@ -194,7 +196,14 @@ public class PrizePicksProjectionsServiceImpl {
             missStreakStillGoing = false;
           }
         }
-
+        if (entityList.size() == 0) {
+          log.info("No player props data found for player: {}", info.getFullName());
+          continue;
+        } else {
+          info.setPlayerId(entityList.get(0).getPlayer_id());
+          info.setTeamAbbreviation(entityList.get(0).getAbbreviation());
+        }
+        info.setPlayerId(!isCombo ? entityList.get(0).getPlayer_id() : null);
         info.setStatType(statType);
         info.setOverStreak(overStreak);
         info.setOverLast3(overLast3);
@@ -207,7 +216,9 @@ public class PrizePicksProjectionsServiceImpl {
         info.setAvgLast10(df.format(avgLast10));
         info.setAvgLast5(df.format(avgLast5));
         info.setAvgLast3(df.format(avgLast3));
-        info.setPlayerId(isCombo || entityList.size() == 0 ? null : entityList.get(0).getPlayer_id());
+        info.setAvglast10LineScorePercentage(calculatePercentage(avgLast10, info.getLineScore()));
+        info.setAvglast5LineScorePercentage(calculatePercentage(avgLast5, info.getLineScore()));
+        info.setAvglast3LineScorePercentage(calculatePercentage(avgLast3, info.getLineScore()));
 
         boolean trendingUp = avgLast3 > avgLast5 && avgLast5 > avgLast10;
         boolean trendingDown = avgLast3 < avgLast5 && avgLast5 < avgLast10;
@@ -219,6 +230,7 @@ public class PrizePicksProjectionsServiceImpl {
         if (overLast10 >= 7 || underLast10 >= 7) {
           frequentlyHit.add(info);
         }
+        allProjections.add(info);
       }
     }
     hotStreaks.sort((a, b) -> {
@@ -233,10 +245,12 @@ public class PrizePicksProjectionsServiceImpl {
     });
     playerProjectionInformationMap.put("Hot Streaks", hotStreaks);
     playerProjectionInformationMap.put("Frequently Hit", frequentlyHit);
+    playerProjectionInformationMap.put("All Projections", allProjections);
   }
 
   private PlayerProjectionInformation mapToResponse(PrizePicksProjectionsNbaEntity entity) {
     return PlayerProjectionInformation.builder()
+        .projId(entity.getProjId())
         .firstName(entity.getFullName().getFirstName())
         .lastName(entity.getFullName().getLastName())
         .fullName(entity.getFullName().toString())

@@ -9,4 +9,4 @@ rm -rf /var/my_app
 mkdir /var/my_app
 aws s3 sync s3://player-props-client /var/my_app
 sudo chmod -R 755 /var/my_app
-echo 'Post deploy executed'
+echo 'Post deploy executed' 

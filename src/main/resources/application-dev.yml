@@ -14,5 +14,7 @@ aws:
     auto: false
 
 application:
-  bucket:
+  prize-picks-bucket:
     name: nba-prize-picks
+  underdog-bucket:
+    name: nba-underdog-bucket

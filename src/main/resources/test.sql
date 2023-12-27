@@ -225,3 +225,27 @@ CREATE TABLE IF NOT EXISTS public.player_props_fact_full
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
+
+CREATE TABLE IF NOT EXISTS public.underdog_projections_nba
+(
+    proj_id text,
+    first_name text,
+    last_name text,
+    stat_type text,
+    line_score double precision,
+    payout_multiplier double precision,
+    opposing_team text,
+    game_date timestamp without time zone
+)
+
+CREATE TABLE IF NOT EXISTS public.underdog_projections_nba
+(
+    id text,
+    first_name text,
+    last_name text,
+    stat_type text,
+    line_score text,
+    payout_multiplier text,
+    opposing_team text,
+    game_date text
+)

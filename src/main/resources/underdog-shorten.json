@@ -1,0 +1,88 @@
+{
+    "appearances": [
+        {
+            "id": "ac67c48d-0c38-4b30-8d55-0e99c10035ef",
+            "badges": [],
+            "lineup_status_id": null,
+            "match_id": 39526,
+            "match_type": "Game",
+            "player_id": "cc542526-a1a8-4945-9780-3b7228a62322",
+            "position_id": "e2571131-7600-5bc9-878b-946a992c8203",
+            "team_id": "530518ed-91db-57c4-9077-27cc0dd9a293"
+        }
+    ],
+    "over_under_lines": [
+        {
+            "id": "ddfdca67-89e2-4347-9fc9-4f0736d5bfd7",
+            "expires_at": null,
+            "live_event": false,
+            "live_event_stat": null,
+            "options": [
+                {
+                    "id": "da5175fc-eba3-4a9a-ac58-fb293ae59379",
+                    "choice": "higher",
+                    "choice_display": "Higher",
+                    "over_under_line_id": "ddfdca67-89e2-4347-9fc9-4f0736d5bfd7",
+                    "payout_multiplier": "1.0",
+                    "type": "OverUnderOption"
+                },
+                {
+                    "id": "c4e96db1-933b-4bb3-833c-b6fc79ea5ee1",
+                    "choice": "lower",
+                    "choice_display": "Lower",
+                    "over_under_line_id": "ddfdca67-89e2-4347-9fc9-4f0736d5bfd7",
+                    "payout_multiplier": "1.0",
+                    "type": "OverUnderOption"
+                }
+            ],
+            "over_under": {
+                "id": "fc27757f-66c8-4c9c-b03b-3f3196ceb85e",
+                "appearance_stat": {
+                    "id": "f8613306-6318-479a-8fa6-639667ee02cd",
+                    "appearance_id": "ac67c48d-0c38-4b30-8d55-0e99c10035ef",
+                    "display_stat": "Rushing Yards",
+                    "graded_by": "high_score",
+                    "pickem_stat_id": "880784a3-e88f-4bc8-bbb2-ad44fb721a48",
+                    "stat": "rushing_yds"
+                },
+                "boost": null,
+                "scoring_type_id": null,
+                "title": "Alvin Kamara Rushing Yards O/U"
+            },
+            "over_under_id": "fc27757f-66c8-4c9c-b03b-3f3196ceb85e",
+            "rank": 1102013,
+            "stat_value": "56.5",
+            "status": "active"
+        }
+    ],
+    "games": [
+        {
+            "id": 39526,
+            "away_team_id": "530518ed-91db-57c4-9077-27cc0dd9a293",
+            "away_team_score": 0,
+            "home_team_id": "d150534e-6a05-587b-b9e3-50ef86602e20",
+            "home_team_score": 0,
+            "match_progress": "Thu 08:15pm",
+            "period": 0,
+            "scheduled_at": "2023-12-22T01:15:00Z",
+            "season_type": "regular",
+            "sport_id": "NFL",
+            "status": "scheduled",
+            "title": "NO @ LAR",
+            "type": "Game",
+            "year": 2023
+        }
+    ],
+    "players": [
+        {
+            "id": "cc542526-a1a8-4945-9780-3b7228a62322",
+            "country": null,
+            "first_name": "Alvin",
+            "image_url": "https://assets.underdogfantasy.com/player-images/nfl/d9c857b2-97da-4fb8-a527-afbbb2a67413.png",
+            "last_name": "Kamara",
+            "position_id": "e2571131-7600-5bc9-878b-946a992c8203",
+            "sport_id": "NFL",
+            "team_id": "530518ed-91db-57c4-9077-27cc0dd9a293"
+        }
+    ]
+}

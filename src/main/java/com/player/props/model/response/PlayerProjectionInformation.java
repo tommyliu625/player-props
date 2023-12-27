@@ -12,11 +12,14 @@ import lombok.Data;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PlayerProjectionInformation {
+    public String projId;
     public String playerId;
+    public String teamAbbreviation;
     public String statType;
     public String firstName;
     public String lastName;
     public String fullName;
+    public Double payoutMultiplier;
     public Double lineScore;
     public String opposingTeam;
     public Date gameDate;
@@ -31,6 +34,9 @@ public class PlayerProjectionInformation {
     public String avgLast10;
     public String avgLast5;
     public String avgLast3;
+    public double avglast10LineScorePercentage;
+    public double avglast5LineScorePercentage;
+    public double avglast3LineScorePercentage;
     public boolean trendingUp;
     public boolean trendingDown;
     public List<LineHistory> lineHistory;

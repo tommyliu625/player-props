@@ -19,7 +19,7 @@ public class PrizePicksProjectionsNbaEntity implements Serializable {
   
     @Id
     @Column(name = "proj_id", nullable = false)
-    public Long id;
+    public String projId;
 
     public FullName fullName;
 

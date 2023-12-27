@@ -1,5 +1,6 @@
 package com.player.props.model.response;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -15,4 +16,6 @@ public class ProjectionsResponse {
   public Map<String, List<PlayerProjectionInformation>> stat_projections;
   
   public Map<String, List<PlayerPropsFactEntity>> player_history;
+
+  public String lastUpdated;
 }
